@@ -1,0 +1,350 @@
+/* =========================================
+   GAYA DASHBOARD ADMIN MODERN
+   ========================================= */
+
+/* Aturan dasar untuk seluruh halaman admin */
+body {
+    font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+    background-color: #f8fafc; /* Memberikan background abu-abu sangat terang agar card putih lebih menonjol */
+    color: #334155;
+}
+
+/* 1. Header Admin yang Lebih Elegan */
+.admin-header {
+    background: linear-gradient(135deg, #166534 0%, #15803d 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(22, 101, 52, 0.2);
+}
+
+.admin-header h2 {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+/* Tombol di Header */
+.admin-header .btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin-header .btn-back:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+}
+
+/* 2. Layout Grid untuk Container Utama */
+.admin-container {
+    padding: 30px;
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    /* Kolom kiri 350px, kolom kanan sisanya */
+    grid-template-columns: 350px 1fr; 
+    gap: 30px;
+    align-items: start;
+}
+
+/* Responsif untuk layar kecil/HP */
+@media (max-width: 992px) {
+    .admin-container {
+        grid-template-columns: 1fr; /* Jadi satu kolom memanjang ke bawah */
+    }
+}
+
+/* 3. Card Modern dengan Shadow Lembut */
+.admin-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    border: 1px solid #f1f5f9;
+}
+
+.card-title {
+    margin-top: 0;
+    margin-bottom: 25px;
+    color: #1e293b;
+    font-size: 1.25rem;
+    font-weight: 700;
+    border-bottom: 2px solid #f1f5f9;
+    padding-bottom: 15px;
+}
+
+/* 4. Form Input yang Lebih Clean */
+.form-group label {
+    color: #475569;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.form-group .form-control {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 12px 15px;
+    font-size: 0.95rem;
+    color: #334155;
+    width: 100%;
+    box-sizing: border-box;
+    transition: all 0.3s;
+}
+
+.form-group .form-control:focus {
+    background-color: #ffffff;
+    border-color: #16a34a;
+    box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.1);
+    outline: none;
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 12px;
+    background: #16a34a;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.btn-submit:hover {
+    background: #15803d;
+    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.2);
+    transform: translateY(-2px);
+}
+
+/* 5. Tabel Elegan & Bersih */
+.table-responsive {
+    overflow-x: auto;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-table th {
+    background-color: #f8fafc;
+    color: #64748b;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 15px;
+    text-align: left;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.admin-table td {
+    padding: 15px;
+    vertical-align: middle;
+    color: #334155;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.admin-table tr:hover td {
+    background-color: #f8fafc; /* Efek highlight saat di-hover */
+}
+
+/* Gambar Produk di Tabel */
+.admin-table img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Badge Kategori Modern */
+.badge-kategori {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: #dbeafe;
+    color: #1e40af;
+    display: inline-block;
+}
+
+/* Tombol Aksi (Edit & Hapus) */
+.action-btns {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-edit, .btn-delete {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    transition: 0.2s;
+}
+
+.btn-edit { background: #f59e0b; }
+.btn-edit:hover { background: #d97706; transform: translateY(-2px); }
+
+.btn-delete { background: #ef4444; }
+.btn-delete:hover { background: #dc2626; transform: translateY(-2px); }
+
+/* =========================================
+   GAYA KHUSUS HALAMAN LOGIN ADMIN
+   ========================================= */
+
+/* 1. Background Setengah Gradien Diagonal */
+body.login-page {
+    margin: 0;
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Cara ajaib gradien diagonal tajam */
+    background: linear-gradient(135deg, 
+        #166534 50%, /* Warna hijau merek pekat dari header utama */
+        #ffffff 50% /* Warna putih bersih */
+    );
+    overflow: hidden;
+}
+
+/* 2. Card Login Modern dan Mengambang */
+.login-card {
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 420px;
+    transition: 0.3s;
+}
+
+.login-card:hover {
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+}
+
+/* 3. Gaya Teks */
+.login-subtitle {
+    text-align: center;
+    color: #6b7280;
+    font-size: 0.95rem;
+    margin-bottom: 30px;
+}
+
+/* 4. Gaya Alert Error */
+.alert-error {
+    padding: 15px;
+    background-color: #fee2e2;
+    color: #dc2626;
+    border-radius: 6px;
+    margin-bottom: 25px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* 5. Gaya Input dengan Ikon */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #1f2937;
+    font-size: 0.9rem;
+}
+
+.input-with-icon {
+    padding-left: 45px !important; /* Memaksa jarak 45px di kiri agar teks tidak menabrak ikon */
+    position: relative;
+}
+
+.input-with-icon i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+    font-size: 1.1rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 15px 12px 45px; /* Memberi ruang di kiri untuk ikon */
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 1rem;
+    color: #1f2937;
+    transition: 0.2s;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #16a34a; /* Hijau merek saat fokus */
+    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+}
+
+/* 6. Gaya Tombol Login Hijau */
+.btn-login-green {
+    width: 100%;
+    padding: 14px;
+    background-color: #166534; /* Warna hijau merek pekat */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    font-family: inherit;
+    transition: 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-login-green:hover {
+    background-color: #15803d; /* Sedikit lebih gelap saat hover */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* 7. Animasi Fade-In saat load */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-out;
+}
+/* Responsif untuk HP */
+@media (max-width: 992px) {
+    .admin-container {
+        grid-template-columns: 1fr; /* Jadi 1 kolom bersusun di layar kecil */
+    }
+}
