@@ -54,5 +54,41 @@
 
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Deteksi semua tombol yang memiliki class 'btn-delete'
+            const deleteButtons = document.querySelectorAll('.btn-delete');
+
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function (e) {
+                    e.preventDefault(); // Mencegah tombol langsung melakukan aksi
+                    
+                    // Cari elemen form terdekat (induk) dari tombol yang diklik
+                    const form = this.closest('.delete-form');
+
+                    // Tampilkan SweetAlert
+                    Swal.fire({
+                        title: 'Apakah Anda yakin?',
+                        text: "Data yang dihapus tidak dapat dikembalikan!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Ya, hapus!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        // Jika konfirmasi 'Ya, hapus!' diklik
+                        if (result.isConfirmed) {
+                            form.submit(); // Lanjutkan proses submit form
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+    
+    @stack('scripts')
 </body>
 </html>

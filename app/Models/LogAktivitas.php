@@ -18,4 +18,11 @@ class LogAktivitas extends Model
         'aksi',
         'keterangan',
     ];
+
+    public function user()
+    {
+        // Relasi bahwa log aktivitas ini dimiliki oleh (belongsTo) seorang User
+        // 'users_id' adalah nama kolom foreign key di tabel log_aktivitas
+        return $this->belongsTo(User::class, 'users_id');
+    }
 }

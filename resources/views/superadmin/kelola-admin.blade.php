@@ -48,18 +48,18 @@
                         </td>
 
                         <td style="padding: 15px; text-align: center; display: flex; gap: 8px; justify-content: center;">
-                        <a href="{{ route('superadmin.admin.edit', $admin->id) }}" style="background: #f59e0b; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; text-decoration: none;" title="Edit Admin">
-                            <i class="fas fa-edit"></i>
-                        </a>
+                            <a href="{{ route('superadmin.admin.edit', $admin->id) }}" style="background: #f59e0b; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; text-decoration: none;" title="Edit Admin">
+                                <i class="fas fa-edit"></i>
+                            </a>
                         
-                        <form action="{{ route('superadmin.admin.destroy', $admin->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus admin ini?');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" style="background: #ef4444; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer;" title="Hapus Admin">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </form>
-                    </td>
+                            <form action="{{ route('superadmin.admin.destroy', $admin->id) }}" method="POST" class="delete-form">
+                                @csrf
+                                @method('DELETE')
+                                <button type="button" class="btn-delete" style="background: #ef4444; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer;" title="Hapus Admin">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>

@@ -16,7 +16,6 @@
     <section class="features-section mb-80 fade-in">
         <div class="container">
             <div class="features-wrapper">
-                
                 <div class="feature-card">
                     <div class="feature-icon">📦</div>
                     <h3 class="feature-title">Produk Lengkap</h3>
@@ -34,7 +33,6 @@
                     <h3 class="feature-title">Pengiriman Cepat</h3>
                     <p class="feature-desc">Layanan pesan antar langsung ke lokasi peternakan Anda dengan armada yang aman dan tepat waktu.</p>
                 </div>
-
             </div>
         </div>
     </section>
@@ -47,50 +45,31 @@
             </div>
             
             <div class="catalog-grid"> 
-                <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1599839619722-39751411ea63?q=80&w=600&auto=format&fit=crop" alt="Pakan Ayam">
-                    <div class="product-info">
-                        <h4>Pakan Petelur Premium</h4>
-                        <p>Pakan komplit butiran untuk ayam petelur dewasa. Meningkatkan produksi telur.</p>
-                        <div class="product-footer">
-                            <div class="price">
-                                <strong>Rp 385.000</strong>
-                                <span>/ karung 50kg</span>
+                {{-- Loop Data Produk dari Database --}}
+                @forelse($produkUnggulan as $produk)
+                    <div class="product-card">
+                        {{-- Menampilkan gambar produk, pastikan sudah di-upload ke folder storage --}}
+                        <img src="{{ asset('storage/' . $produk->gambar) }}" alt="{{ $produk->nama_produk }}">
+                        
+                        <div class="product-info">
+                            <h4>{{ $produk->nama_produk }}</h4>
+                            <p>{{ Str::limit($produk->deskripsi, 80) }}</p>
+                            
+                            <div class="product-footer">
+                                <div class="price">
+                                    <strong>Rp {{ number_format($produk->harga, 0, ',', '.') }}</strong>
+                                    <span>/ {{ $produk->satuan }}</span>
+                                </div>
+                                <span class="stock">Stok: {{ $produk->stok }}</span>
                             </div>
-                            <span class="stock">Stok: 120</span>
                         </div>
                     </div>
-                </div>
-
-                <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1584362917165-526a968579e8?q=80&w=600&auto=format&fit=crop" alt="Vaksin ND">
-                    <div class="product-info">
-                        <h4>Vaksin ND-IB Live</h4>
-                        <p>Vaksin aktif untuk mencegah penyakit ND dan IB pada ayam.</p>
-                        <div class="product-footer">
-                            <div class="price">
-                                <strong>Rp 125.000</strong>
-                                <span>/ botol</span>
-                            </div>
-                            <span class="stock">Stok: 50</span>
-                        </div>
+                @empty
+                    {{-- Pesan jika is_unggulan bernilai 1 tidak ditemukan di database --}}
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px; background: #f8fafc; border-radius: 12px;">
+                        <p style="color: #64748b; font-style: italic;">Saat ini belum ada produk unggulan yang tersedia.</p>
                     </div>
-                </div>
-
-                <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1599839619722-39751411ea63?q=80&w=600&auto=format&fit=crop" alt="Pakan Pedaging">
-                    <div class="product-info">
-                        <h4>Pakan Broiler Starter</h4>
-                        <p>Pakan masa awal pertumbuhan broiler. Kaya protein dan nutrisi.</p>
-                        <div class="product-footer">
-                            <div class="price">
-                                <strong>Rp 410.000</strong>
-                                <span>/ karung 50kg</span>
-                            </div>
-                            <span class="stock">Stok: 85</span>
-                        </div>
-                    </div>
-                </div>
+                @endforelse
             </div>
             
             <div class="view-all">

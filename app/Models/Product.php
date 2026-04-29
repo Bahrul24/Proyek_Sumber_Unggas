@@ -11,12 +11,7 @@ class Product extends Model
 
     // Kolom yang diizinkan untuk diisi
     protected $fillable = [
-        'users_id',
-        'nama_produk',
-        'kategori',
-        'harga',
-        'satuan',
-        'stok',
-        'gambar'
-    ];
+    'nama_produk', 'kategori', 'harga', 'satuan', 'stok', 'gambar', 'is_unggulan', 'users_id'
+];
+
 }

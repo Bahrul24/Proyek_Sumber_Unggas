@@ -72,10 +72,10 @@
                                     <i class="fas fa-edit"></i>
                                 </a>
                                 
-                                <form action="{{ route('superadmin.katalog.destroy', $produk->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus produk {{ $produk->nama_produk }}?');">
+                                <form action="{{ route('superadmin.katalog.destroy', $produk->id) }}" method="POST" class="delete-form">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" style="background: #ef4444; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; transition: 0.2s;" title="Hapus Produk">
+                                    <button type="button" class="btn-delete" style="background: #ef4444; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; transition: 0.2s;" title="Hapus Produk">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </form>

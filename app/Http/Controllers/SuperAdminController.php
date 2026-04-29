@@ -9,18 +9,70 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\LogAktivitas; 
 use App\Models\Setting;
 use Illuminate\Support\Facades\Storage; 
-use Barryvdh\DomPDF\Facade\Pdf; // <-- WAJIB UNTUK EXPORT PDF
+use Barryvdh\DomPDF\Facade\Pdf; 
 
 class SuperAdminController extends Controller
 {
     public function dashboard()
     {
+        // Statistik Utama
         $totalAdmin = User::where('role', 'admin')->where('status', 'aktif')->count();
         $totalProduk = Product::count();
         $stokMenipis = Product::where('stok', '<', 10)->count();
 
-        return view('superadmin.dashboard', compact('totalAdmin', 'totalProduk', 'stokMenipis'));
+        // Aktivitas Terbaru
+        $aktivitasTerbaru = LogAktivitas::with('user')->latest()->take(5)->get();
+
+        // Produk yang sudah jadi unggulan (is_unggulan = 1)
+        $produkUnggulan = Product::where('is_unggulan', 1)->get();
+
+        // PERBAIKAN DI SINI:
+        // Ambil produk yang is_unggulan-nya 0 ATAU NULL
+        $pilihanProduk = Product::where(function($query) {
+            $query->where('is_unggulan', 0)
+                ->orWhereNull('is_unggulan');
+        })->get();
+
+        return view('superadmin.dashboard', compact(
+            'totalAdmin', 'totalProduk', 'stokMenipis', 
+            'aktivitasTerbaru', 'produkUnggulan', 'pilihanProduk'
+        ));
     }
+
+    // --- FITUR CRUD PRODUK UNGGULAN DI BERANDA ---
+
+    public function storeUnggulan(Request $request)
+    {
+        $product = Product::findOrFail($request->product_id);
+        
+        // Ubah nilai NULL/0 menjadi 1 (True)
+        $product->update(['is_unggulan' => 1]); 
+
+        // Simpan Log (Ini sudah berhasil di tempatmu)
+        LogAktivitas::create([
+            'users_id'   => auth()->id(),
+            'aksi'       => 'Tambah Unggulan',
+            'keterangan' => 'Menjadikan "' . $product->nama_produk . '" sebagai produk unggulan.'
+        ]);
+
+        return redirect()->back()->with('success', 'Berhasil! Cek tabel di bawah sekarang.');
+    }
+
+    public function destroyUnggulan($id)
+    {
+        $product = Product::findOrFail($id);
+        $product->update(['is_unggulan' => false]);
+
+        LogAktivitas::create([
+            'users_id'   => auth()->id(),
+            'aksi'       => 'Hapus Unggulan',
+            'keterangan' => 'Menghapus "' . $product->nama_produk . '" dari daftar unggulan.'
+        ]);
+
+        return redirect()->route('superadmin.dashboard')->with('success', 'Produk dihapus dari unggulan!');
+    }
+
+    // --- KELOLA ADMIN ---
 
     public function kelolaAdmin()
     {
@@ -102,6 +154,8 @@ class SuperAdminController extends Controller
         return back()->with('success', 'Admin berhasil dihapus!');
     }
 
+    // --- KONTROL KATALOG ---
+
     public function kontrolKatalog()
     {
         $produks = Product::all(); 
@@ -132,7 +186,7 @@ class SuperAdminController extends Controller
         }
 
         Product::create([
-            'users_id'   => auth()->id(),
+            'users_id'    => auth()->id(),
             'nama_produk' => $request->nama_produk,
             'kategori'    => $request->kategori,
             'harga'       => $request->harga,
@@ -166,10 +220,11 @@ class SuperAdminController extends Controller
             'harga'       => 'required|numeric|min:0|max_digits:10',
             'satuan'      => 'required|string|max:100',
             'stok'        => 'required|integer|min:0',
+            'deskripsi'   => 'nullable|string|max:100',
             'gambar'      => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        $data = $request->only(['nama_produk', 'kategori', 'harga', 'satuan', 'stok']);
+        $data = $request->only(['nama_produk', 'kategori', 'harga', 'satuan', 'stok', 'deskripsi']);
 
         if ($request->hasFile('gambar')) {
             if ($produk->gambar) {
@@ -213,9 +268,11 @@ class SuperAdminController extends Controller
         return back()->with('success', 'Produk berhasil dihapus!');
     }
 
+    // --- LAPORAN & PENGATURAN ---
+
     public function laporan(Request $request)
     {
-        $query = LogAktivitas::latest();
+        $query = LogAktivitas::with('user')->latest();
 
         if ($request->filled('start_date')) {
             $query->whereDate('created_at', '>=', $request->start_date);
