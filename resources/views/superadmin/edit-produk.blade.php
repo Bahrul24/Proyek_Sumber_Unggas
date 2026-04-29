@@ -21,9 +21,8 @@
             <div style="margin-bottom: 15px;">
                 <label>Kategori</label>
                 <select name="kategori" required style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;">
-                    <option value="Pakan" {{ $produk->kategori == 'Pakan' ? 'selected' : '' }}>Pakan Ternak</option>
-                    <option value="Bibit" {{ $produk->kategori == 'Bibit' ? 'selected' : '' }}>Bibit Unggas</option>
-                    <option value="Obat" {{ $produk->kategori == 'Obat' ? 'selected' : '' }}>Vitamin & Obat</option>
+                    <option value="Pakan" {{ $produk->kategori == 'Pakan' ? 'selected' : '' }}>Pakan</option>
+                    <option value="Vaksin" {{ $produk->kategori == 'Vaksin' ? 'selected' : '' }}>Vaksin</option>
                 </select>
             </div>
 

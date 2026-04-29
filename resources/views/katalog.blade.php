@@ -21,7 +21,7 @@
             <div class="catalog-grid" id="productGrid">
                 
                 @forelse($products as $product)
-                    <div class="product-card" data-kategori="{{ $product->kategori }}">
+                    <div class="product-card" data-kategori="{{ strtolower($product->kategori) }}">
                         
                         <img src="{{ asset('storage/' . $product->gambar) }}" alt="{{ $product->nama_produk }}" style="width: 100%; height: 250px; object-fit: cover;">
                         
@@ -74,25 +74,25 @@
 
         filterButtons.forEach(button => {
             button.addEventListener('click', () => {
-                // 1. Hapus class 'active' warna hijau dari semua tombol
+                // 1. Hapus warna hijau dari semua tombol
                 filterButtons.forEach(btn => btn.classList.remove('active'));
                 
-                // 2. Tambahkan class 'active' ke tombol yang baru saja diklik
+                // 2. Tambahkan warna hijau ke tombol yang diklik
                 button.classList.add('active');
 
-                // 3. Ambil nilai filter (semua, pakan, atau vaksin)
+                // 3. Ambil data filter tombol ('semua', 'pakan', atau 'vaksin')
                 const filterValue = button.getAttribute('data-filter');
 
-                // 4. Cek setiap kartu produk
+                // 4. Bandingkan dengan kartu produk
                 productCards.forEach(card => {
                     const productCategory = card.getAttribute('data-kategori');
                     
                     if (filterValue === 'semua' || filterValue === productCategory) {
-                        card.classList.remove('hidden'); // Tampilkan produk
-                        card.style.display = 'block'; // Pastikan tampil dengan benar
+                        card.classList.remove('hidden'); 
+                        card.style.display = 'block'; 
                     } else {
-                        card.classList.add('hidden'); // Sembunyikan produk
-                        card.style.display = 'none'; // Hilangkan dari layout grid
+                        card.classList.add('hidden'); 
+                        card.style.display = 'none'; 
                     }
                 });
             });

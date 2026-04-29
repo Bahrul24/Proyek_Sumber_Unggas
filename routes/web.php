@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
@@ -18,7 +19,7 @@ Route::get('/tentang-kami', function () {
 // Rute untuk menampilkan halaman katalog
 Route::get('/katalog', function () {
     $products = Product::latest()->get(); // Ambil semua data produk dari database
-    return view('katalog', compact('products')); // Kirim data ke view (ganti 'katalog' dengan nama file blade Anda)
+    return view('katalog', compact('products')); // Kirim data ke view
 });
 
 // Route untuk Kontak
@@ -71,7 +72,7 @@ Route::middleware('auth')->group(function () {
 */
 Route::middleware('auth')->prefix('superadmin')->group(function () {
     
-    // 1. Halaman Dashboard (Ringkasan Utama) - DIUBAH MENGGUNAKAN CONTROLLER
+    // 1. Halaman Dashboard (Ringkasan Utama)
     Route::get('/', [SuperAdminController::class, 'dashboard'])->name('superadmin.dashboard');
 
     // 2. Halaman Kelola Tim Admin (Menampilkan Data)
@@ -94,12 +95,12 @@ Route::middleware('auth')->prefix('superadmin')->group(function () {
     Route::put('/katalog/{id}', [SuperAdminController::class, 'updateProduct'])->name('superadmin.katalog.update');
     Route::delete('/katalog/{id}', [SuperAdminController::class, 'destroyProduct'])->name('superadmin.katalog.destroy');
 
-    // 5. Halaman Laporan Aktivitas
+    // 5. Halaman Laporan Aktivitas & Export PDF
     Route::get('/laporan', [SuperAdminController::class, 'laporan'])->name('superadmin.laporan');
+    Route::get('/laporan/pdf', [SuperAdminController::class, 'exportPdf'])->name('superadmin.laporan.pdf');
 
-    // Halaman Pengaturan
+    // 6. Halaman Pengaturan
     Route::get('/pengaturan', [SuperAdminController::class, 'pengaturan'])->name('superadmin.pengaturan');
-    // Proses Simpan Pengaturan
     Route::post('/pengaturan', [SuperAdminController::class, 'updatePengaturan'])->name('superadmin.pengaturan.update');
 
 });

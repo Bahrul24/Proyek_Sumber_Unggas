@@ -8,11 +8,25 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
-    // Menampilkan halaman dashboard admin beserta data produk
-    public function index()
+    // Menampilkan halaman dashboard admin beserta data produk (DENGAN FILTER KATEGORI)
+    public function index(Request $request)
     {
-        $products = Product::latest()->get(); // Ambil semua produk, urutkan dari yang terbaru
-        return view('admin.dashboard', compact('products'));
+        // 1. Tangkap parameter 'kategori' dari URL (misal: ?kategori=Pakan)
+        $kategori = $request->query('kategori');
+
+        // 2. Buat query dasar
+        $query = Product::query();
+
+        // 3. Jika ada filter kategori yang diklik (Pakan atau Vaksin), saring datanya
+        if ($kategori && in_array($kategori, ['Pakan', 'Vaksin'])) {
+            $query->where('kategori', $kategori);
+        }
+
+        // 4. Ambil data produk, urutkan dari yang terbaru
+        $products = $query->latest()->get(); 
+
+        // 5. Kirim data produk dan status kategori aktif ke view
+        return view('admin.dashboard', compact('products', 'kategori'));
     }
 
     // Memproses form tambah produk

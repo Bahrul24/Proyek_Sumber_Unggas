@@ -26,8 +26,8 @@
                 <div class="form-group">
                     <label>Kategori</label>
                     <select name="kategori" class="form-control" required>
-                        <option value="pakan">Pakan Ternak</option>
-                        <option value="vaksin">Vaksin Ayam</option>
+                        <option value="Pakan">Pakan Ternak</option>
+                        <option value="Vaksin">Vaksin Ayam</option>
                     </select>
                 </div>
 
@@ -58,6 +58,27 @@
         <div class="admin-card">
             <h3 class="card-title">Daftar Produk Katalog</h3>
             
+            <div style="margin-bottom: 20px; display: flex; gap: 10px;">
+                <a href="{{ route('admin.dashboard') }}" 
+                   style="padding: 8px 15px; border-radius: 20px; text-decoration: none; font-weight: bold; 
+                          background: {{ request('kategori') == null ? '#0f766e' : '#e2e8f0' }}; 
+                          color: {{ request('kategori') == null ? 'white' : '#475569' }};">
+                    Semua
+                </a>
+                <a href="{{ route('admin.dashboard', ['kategori' => 'Pakan']) }}" 
+                   style="padding: 8px 15px; border-radius: 20px; text-decoration: none; font-weight: bold; 
+                          background: {{ strtolower(request('kategori')) == 'pakan' ? '#0f766e' : '#e2e8f0' }}; 
+                          color: {{ strtolower(request('kategori')) == 'pakan' ? 'white' : '#475569' }};">
+                    Pakan Ternak
+                </a>
+                <a href="{{ route('admin.dashboard', ['kategori' => 'Vaksin']) }}" 
+                   style="padding: 8px 15px; border-radius: 20px; text-decoration: none; font-weight: bold; 
+                          background: {{ strtolower(request('kategori')) == 'vaksin' ? '#0f766e' : '#e2e8f0' }}; 
+                          color: {{ strtolower(request('kategori')) == 'vaksin' ? 'white' : '#475569' }};">
+                    Vaksin Ayam
+                </a>
+            </div>
+            
             <div class="table-responsive">
                 <table class="admin-table">
                     <thead>
@@ -76,7 +97,7 @@
                                 <td><img src="{{ asset('storage/' . $item->gambar) }}" alt="{{ $item->nama_produk }}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;"></td>
                                 <td><strong>{{ $item->nama_produk }}</strong></td>
                                 <td>
-                                    @if($item->kategori == 'pakan')
+                                    @if(strtolower($item->kategori) == 'pakan')
                                         <span class="badge-kategori">Pakan</span>
                                     @else
                                         <span class="badge-kategori" style="background: #fce7f3; color: #be185d;">Vaksin</span>
@@ -102,7 +123,9 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" style="text-align: center; color: #64748b;">Belum ada data produk.</td>
+                                <td colspan="6" style="text-align: center; color: #64748b; padding: 20px;">
+                                    Belum ada data produk untuk kategori ini.
+                                </td>
                             </tr>
                         @endforelse
                     </tbody>

@@ -24,10 +24,9 @@
             <div style="margin-bottom: 20px;">
                 <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #475569;">Kategori</label>
                 <select name="kategori" required style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px; background: white;">
-                    <option value="Pakan">Pakan Ternak</option>
-                    <option value="Bibit">Bibit Unggas</option>
-                    <option value="Obat">Vitamin & Obat</option>
-                    <option value="Peralatan">Peralatan</option>
+                    <option value="" disabled selected>-- Pilih Kategori --</option>
+                    <option value="Pakan">Pakan</option>
+                    <option value="Vaksin">Vaksin</option>
                 </select>
             </div>
 
