@@ -122,7 +122,8 @@
                             </td>
                             <td style="padding: 12px 10px; color: #0f766e; font-weight: bold;">Rp {{ number_format($product->harga, 0, ',', '.') }}</td>
                             <td style="padding: 12px 10px;">
-                                <span style="color: {{ $product->stok <= 10 ? '#ef4444' : '#1e293b' }}; font-weight: {{ $product->stok <= 10 ? 'bold' : 'normal' }};">
+                                {{-- PERUBAHAN ADA DI BARIS BAWAH INI ( <= 10 diubah menjadi < 10 ) --}}
+                                <span style="color: {{ $product->stok < 10 ? '#ef4444' : '#1e293b' }}; font-weight: {{ $product->stok < 10 ? 'bold' : 'normal' }};">
                                     {{ $product->stok }}
                                 </span>
                             </td>
