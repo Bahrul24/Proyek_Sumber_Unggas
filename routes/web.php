@@ -12,30 +12,24 @@ use App\Http\Controllers\SuperAdminController;
 |--------------------------------------------------------------------------
 */
 
-// Route untuk Beranda - SEKARANG DINAMIS
 Route::get('/', function () {
-    // Mengambil produk yang ditandai sebagai unggulan (is_unggulan = 1)
     $produkUnggulan = Product::where('is_unggulan', 1)->get();
     return view('home', compact('produkUnggulan'));
 });
 
-// Route untuk Tentang Kami
 Route::get('/tentang-kami', function () {
     return view('tentang-kami');
 });
 
-// Rute untuk menampilkan halaman katalog lengkap
 Route::get('/katalog', function () {
     $products = Product::latest()->get(); 
     return view('katalog', compact('products')); 
 });
 
-// Route untuk Kontak
 Route::get('/kontak', function () {
     return view('kontak');
 });
 
-// Route untuk Profil Toko
 Route::get('/profil-toko', function () {
     return view('profil-toko');
 });
@@ -57,22 +51,19 @@ Route::middleware('guest')->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::middleware('auth')->group(function () {
-    // Menampilkan halaman utama dashboard admin
+    
+    // Menampilkan halaman utama dashboard admin (Kembali menggunakan ProductController)
     Route::get('/admin/dashboard', [ProductController::class, 'index'])->name('admin.dashboard');
     
-    // [BARU] Menampilkan halaman form tambah produk khusus
+    // Rute untuk mengelola Produk Unggulan di Panel Admin
+    Route::post('/admin/unggulan', [ProductController::class, 'storeUnggulan'])->name('admin.unggulan.store');
+    Route::delete('/admin/unggulan/{id}', [ProductController::class, 'destroyUnggulan'])->name('admin.unggulan.destroy');
+    
+    // Rute CRUD Produk (Katalog Global)
     Route::get('/admin/products/create', [ProductController::class, 'create'])->name('product.create');
-    
-    // Proses menyimpan produk baru
     Route::post('/admin/products', [ProductController::class, 'store'])->name('product.store');
-    
-    // Menampilkan halaman edit produk
     Route::get('/admin/products/{id}/edit', [ProductController::class, 'edit'])->name('product.edit');
-    
-    // Proses update produk
     Route::put('/admin/products/{id}', [ProductController::class, 'update'])->name('product.update');
-    
-    // Proses hapus produk
     Route::delete('/admin/products/{id}', [ProductController::class, 'destroy'])->name('product.destroy');
 
     // Proses logout
@@ -87,13 +78,12 @@ Route::middleware('auth')->group(function () {
 */
 Route::middleware('auth')->prefix('superadmin')->group(function () {
     
-    // 1. Halaman Dashboard & CRUD Produk Unggulan
+    // 1. Halaman Dashboard
     Route::get('/', [SuperAdminController::class, 'dashboard'])->name('superadmin.dashboard');
     
-    // Rute untuk mengelola status Produk Unggulan
+    // Rute Produk Unggulan Superadmin
     Route::post('/unggulan', [SuperAdminController::class, 'storeUnggulan'])->name('superadmin.unggulan.store');
     Route::delete('/unggulan/{id}', [SuperAdminController::class, 'destroyUnggulan'])->name('superadmin.unggulan.destroy');
-
 
     // 2. Halaman Kelola Tim Admin
     Route::get('/admin', [SuperAdminController::class, 'kelolaAdmin'])->name('superadmin.admin.index');
@@ -103,8 +93,7 @@ Route::middleware('auth')->prefix('superadmin')->group(function () {
     Route::put('/admin/{id}', [SuperAdminController::class, 'updateAdmin'])->name('superadmin.admin.update');
     Route::delete('/admin/{id}', [SuperAdminController::class, 'destroyAdmin'])->name('superadmin.admin.destroy');
 
-
-    // 3. Halaman Kontrol Katalog Global (CRUD Utama Produk)
+    // 3. Halaman Kontrol Katalog Global (CRUD Utama Produk via Superadmin)
     Route::get('/katalog', [SuperAdminController::class, 'kontrolKatalog'])->name('superadmin.katalog');
     Route::get('/katalog/create', [SuperAdminController::class, 'createProduct'])->name('superadmin.katalog.create');
     Route::post('/katalog', [SuperAdminController::class, 'storeProduct'])->name('superadmin.katalog.store');
@@ -112,11 +101,9 @@ Route::middleware('auth')->prefix('superadmin')->group(function () {
     Route::put('/katalog/{id}', [SuperAdminController::class, 'updateProduct'])->name('superadmin.katalog.update');
     Route::delete('/katalog/{id}', [SuperAdminController::class, 'destroyProduct'])->name('superadmin.katalog.destroy');
 
-
-    // 4. Halaman Laporan Aktivitas & Export PDF
+    // 4. Halaman Laporan Aktivitas
     Route::get('/laporan', [SuperAdminController::class, 'laporan'])->name('superadmin.laporan');
     Route::get('/laporan/pdf', [SuperAdminController::class, 'exportPdf'])->name('superadmin.laporan.pdf');
-
 
     // 5. Halaman Pengaturan
     Route::get('/pengaturan', [SuperAdminController::class, 'pengaturan'])->name('superadmin.pengaturan');

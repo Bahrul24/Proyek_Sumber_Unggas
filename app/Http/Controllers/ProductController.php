@@ -8,28 +8,59 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
-    // Menampilkan halaman dashboard admin beserta data produk (DENGAN FILTER KATEGORI)
+    // --- METHOD UNTUK HALAMAN DASHBOARD ADMIN UTAMA ---
     public function index(Request $request)
     {
-        // 1. Tangkap parameter 'kategori' dari URL (misal: ?kategori=Pakan)
+        // 1. Tangkap parameter 'kategori' dari URL jika ada filter (misal: ?kategori=Pakan)
         $kategori = $request->query('kategori');
 
-        // 2. Buat query dasar
-        $query = Product::query();
+        // 2. Statistik Utama
+        $totalProduk = Product::count();
+        $stokMenipis = Product::where('stok', '<', 10)->count();
 
-        // 3. Jika ada filter kategori yang diklik (Pakan atau Vaksin), saring datanya
+        // 3. Query untuk Semua Produk (Kontrol Katalog) beserta Filter Kategori
+        $query = Product::query();
         if ($kategori && in_array($kategori, ['Pakan', 'Vaksin'])) {
             $query->where('kategori', $kategori);
         }
-
-        // 4. Ambil data produk, urutkan dari yang terbaru
         $products = $query->latest()->get(); 
 
-        // 5. Kirim data produk dan status kategori aktif ke view
-        return view('admin.dashboard', compact('products', 'kategori'));
+        // 4. Data Produk Unggulan (is_unggulan = 1)
+        $produkUnggulan = Product::where('is_unggulan', 1)->get();
+
+        // 5. Data pilihan produk untuk dropdown di Modal (is_unggulan = 0 / NULL)
+        $pilihanProduk = Product::where(function($query) {
+            $query->where('is_unggulan', 0)
+                  ->orWhereNull('is_unggulan');
+        })->get();
+
+        // Kirim semua variabel ke view
+        return view('admin.dashboard', compact(
+            'totalProduk', 'stokMenipis', 'products', 
+            'produkUnggulan', 'pilihanProduk', 'kategori'
+        ));
     }
 
-    // [BARU] Menampilkan halaman form tambah produk
+    // --- FITUR KELOLA PRODUK UNGGULAN ---
+    public function storeUnggulan(Request $request)
+    {
+        $product = Product::findOrFail($request->product_id);
+        $product->update(['is_unggulan' => 1]); 
+
+        return redirect()->back()->with('success', 'Produk berhasil ditambahkan ke Unggulan!');
+    }
+
+    public function destroyUnggulan($id)
+    {
+        $product = Product::findOrFail($id);
+        $product->update(['is_unggulan' => 0]);
+
+        return redirect()->back()->with('success', 'Produk dilepas dari daftar Unggulan!');
+    }
+
+    // --- FITUR CRUD KATALOG PRODUK ---
+    
+    // Menampilkan halaman form tambah produk
     public function create()
     {
         return view('admin.create-product');
@@ -96,7 +127,7 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
 
-        // 1. Validasi Input (gambar dibuat 'nullable' karena admin mungkin hanya ingin ganti harga tanpa ganti gambar)
+        // 1. Validasi Input (gambar nullable)
         $request->validate([
             'nama_produk' => 'required',
             'kategori'    => 'required',

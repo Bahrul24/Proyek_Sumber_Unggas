@@ -18,11 +18,12 @@
 <body>
 
     <aside class="sidebar">
-        <div class="sidebar-header">
-            <div style="width: 60px; height: 60px; background: white; border-radius: 50%; margin: 0 auto 10px; display:flex; align-items:center; justify-content:center; color:#0f766e; font-size: 24px; font-weight:bold;">
-                <i class="fas fa-rooster"></i>
+        <div class="sidebar-header" style="text-align: center;">
+            <div class="sidebar-logo">
+                <img src="{{ asset('images/logo-su.png') }}" alt="Logo Sumber Unggas" onerror="this.src='https://via.placeholder.com/70?text=SU'">
+                <h2>Panel Admin</h2>
             </div>
-            <h3>Panel Admin</h3>
+            
         </div>
         <ul class="sidebar-menu">
             <li>
