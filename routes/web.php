@@ -57,12 +57,25 @@ Route::middleware('guest')->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::middleware('auth')->group(function () {
+    // Menampilkan halaman utama dashboard admin
     Route::get('/admin/dashboard', [ProductController::class, 'index'])->name('admin.dashboard');
+    
+    // [BARU] Menampilkan halaman form tambah produk khusus
+    Route::get('/admin/products/create', [ProductController::class, 'create'])->name('product.create');
+    
+    // Proses menyimpan produk baru
     Route::post('/admin/products', [ProductController::class, 'store'])->name('product.store');
-    Route::delete('/admin/products/{id}', [ProductController::class, 'destroy'])->name('product.destroy');
+    
+    // Menampilkan halaman edit produk
     Route::get('/admin/products/{id}/edit', [ProductController::class, 'edit'])->name('product.edit');
+    
+    // Proses update produk
     Route::put('/admin/products/{id}', [ProductController::class, 'update'])->name('product.update');
+    
+    // Proses hapus produk
+    Route::delete('/admin/products/{id}', [ProductController::class, 'destroy'])->name('product.destroy');
 
+    // Proses logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 

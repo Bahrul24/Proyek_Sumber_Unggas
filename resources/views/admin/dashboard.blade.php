@@ -1,86 +1,69 @@
-@extends('layouts.admin')
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kontrol Katalog - Panel Admin</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="{{ asset('css/admin-style.css') }}">
+</head>
+<body>
 
-@section('title', 'Dashboard Admin')
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div style="width: 60px; height: 60px; background: white; border-radius: 50%; margin: 0 auto 10px; display:flex; align-items:center; justify-content:center; color:#0f766e; font-size: 24px; font-weight:bold;">
+                <i class="fas fa-rooster"></i>
+            </div>
+            <h3>Panel Admin</h3>
+        </div>
+        <ul class="sidebar-menu">
+            <li>
+                <a href="{{ route('admin.dashboard') }}" class="active">
+                    <i class="fas fa-boxes"></i> Kontrol Katalog
+                </a>
+            </li>
+        </ul>
+    </aside>
 
-@section('content')
-
-    <div class="admin-container">
+    <main class="main-content">
         
-        <div class="admin-card">
-            <h3 class="card-title">Tambah Produk Baru</h3>
+        <header class="topbar">
+            <div class="topbar-left">
+                <i class="fas fa-shield-alt"></i> Panel Kendali Pusat
+            </div>
+            <div class="topbar-right">
+                <span style="color: #475569; font-weight: 500;">Halo, {{ Auth::user()->name ?? 'Admin' }}!</span>
+                <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
+                    @csrf
+                    <button type="submit" class="btn-logout">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </form>
+            </div>
+        </header>
+
+        <div class="content-area">
             
             @if(session('success'))
-                <div style="padding: 10px; background: #dcfce7; color: #166534; margin-bottom: 15px; border-radius: 8px;">
-                    {{ session('success') }}
+                <div style="background-color: #d1fae5; color: #065f46; padding: 15px 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #10b981;">
+                    <i class="fas fa-check-circle"></i> {{ session('success') }}
                 </div>
             @endif
 
-            <form action="{{ route('product.store') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                
-                <div class="form-group">
-                    <label>Nama Produk</label>
-                    <input type="text" name="nama_produk" class="form-control" required placeholder="Contoh: Pakan Starter BR1">
+            <div class="page-header">
+                <div class="page-title">
+                    <h2>Kontrol Katalog Global</h2>
+                    <p>Kelola semua produk pakan dan unggas yang tampil di website utama.</p>
                 </div>
-                
-                <div class="form-group">
-                    <label>Kategori</label>
-                    <select name="kategori" class="form-control" required>
-                        <option value="Pakan">Pakan Ternak</option>
-                        <option value="Vaksin">Vaksin Ayam</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Harga (Rp)</label>
-                    <input type="number" name="harga" class="form-control" required placeholder="Contoh: 385000">
-                </div>
-
-                <div class="form-group">
-                    <label>Satuan</label>
-                    <input type="text" name="satuan" class="form-control" required placeholder="Contoh: / karung 50kg">
-                </div>
-
-                <div class="form-group">
-                    <label>Stok Tersedia</label>
-                    <input type="number" name="stok" class="form-control" required placeholder="Contoh: 120">
-                </div>
-
-                <div class="form-group">
-                    <label>Upload Gambar Produk</label>
-                    <input type="file" name="gambar" class="form-control" accept="image/*" required style="padding: 9px 15px;">
-                </div>
-
-                <button type="submit" class="btn-submit"><i class="fas fa-save"></i> Simpan Produk</button>
-            </form>
-        </div> 
-        
-        <div class="admin-card">
-            <h3 class="card-title">Daftar Produk Katalog</h3>
-            
-            <div style="margin-bottom: 20px; display: flex; gap: 10px;">
-                <a href="{{ route('admin.dashboard') }}" 
-                   style="padding: 8px 15px; border-radius: 20px; text-decoration: none; font-weight: bold; 
-                          background: {{ request('kategori') == null ? '#0f766e' : '#e2e8f0' }}; 
-                          color: {{ request('kategori') == null ? 'white' : '#475569' }};">
-                    Semua
-                </a>
-                <a href="{{ route('admin.dashboard', ['kategori' => 'Pakan']) }}" 
-                   style="padding: 8px 15px; border-radius: 20px; text-decoration: none; font-weight: bold; 
-                          background: {{ strtolower(request('kategori')) == 'pakan' ? '#0f766e' : '#e2e8f0' }}; 
-                          color: {{ strtolower(request('kategori')) == 'pakan' ? 'white' : '#475569' }};">
-                    Pakan Ternak
-                </a>
-                <a href="{{ route('admin.dashboard', ['kategori' => 'Vaksin']) }}" 
-                   style="padding: 8px 15px; border-radius: 20px; text-decoration: none; font-weight: bold; 
-                          background: {{ strtolower(request('kategori')) == 'vaksin' ? '#0f766e' : '#e2e8f0' }}; 
-                          color: {{ strtolower(request('kategori')) == 'vaksin' ? 'white' : '#475569' }};">
-                    Vaksin Ayam
+                <a href="{{ route('product.create') }}" class="btn-add" style="text-decoration: none; display: inline-block;">
+                    <i class="fas fa-plus"></i> Tambah Produk Baru
                 </a>
             </div>
-            
-            <div class="table-responsive">
-                <table class="admin-table">
+
+            <div class="table-container">
+                <table>
                     <thead>
                         <tr>
                             <th>Gambar</th>
@@ -92,47 +75,61 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($products as $item)
-                            <tr>
-                                <td><img src="{{ asset('storage/' . $item->gambar) }}" alt="{{ $item->nama_produk }}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;"></td>
-                                <td><strong>{{ $item->nama_produk }}</strong></td>
-                                <td>
-                                    @if(strtolower($item->kategori) == 'pakan')
-                                        <span class="badge-kategori">Pakan</span>
-                                    @else
-                                        <span class="badge-kategori" style="background: #fce7f3; color: #be185d;">Vaksin</span>
-                                    @endif
-                                </td>
-                                <td>Rp {{ number_format($item->harga, 0, ',', '.') }}</td>
-                                <td>{{ $item->stok }}</td>
-                                <td>
-                                    <div class="action-btns" style="display: flex; gap: 8px; align-items: center;">
-                                        <a href="{{ route('product.edit', $item->id) }}" class="btn-edit" title="Edit" style="display: inline-flex; justify-content: center; align-items: center; width: 36px; height: 36px; text-decoration: none; padding: 0;">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-    
-                                    <form action="{{ route('product.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus produk {{ $item->nama_produk }} ini?');" style="margin: 0; padding: 0; display: inline-block;">
+                        @forelse($products as $product)
+                        <tr>
+                            <td>
+                                @if($product->gambar)
+                                    <img src="{{ asset('storage/' . $product->gambar) }}" alt="Img" style="width: 50px; height: 50px; object-fit: cover; border-radius: 6px; border: 1px solid #e2e8f0;">
+                                @else
+                                    <div style="width: 50px; height: 50px; background: #f1f5f9; border-radius: 6px; display:flex; align-items:center; justify-content:center; color:#94a3b8; font-size:12px; border: 1px solid #e2e8f0;">No Img</div>
+                                @endif
+                            </td>
+                            <td>
+                                <strong style="color: #1e293b;">{{ $product->nama_produk }}</strong><br>
+                                <span style="font-size: 0.8rem; color: #94a3b8;">ID: #PRD-{{ $product->id }}</span>
+                            </td>
+                            <td>
+                                <span class="badge {{ $product->kategori == 'Vaksin' ? 'badge-vaksin' : 'badge-pakan' }}">
+                                    {{ $product->kategori }}
+                                </span>
+                            </td>
+                            <td style="font-weight: 500;">Rp {{ number_format($product->harga, 0, ',', '.') }}</td>
+                            <td>
+                                @if($product->stok <= 5)
+                                    <span style="color: #ef4444; font-weight: bold;">{{ $product->stok }} <i class="fas fa-exclamation-triangle"></i></span>
+                                @else
+                                    {{ $product->stok }}
+                                @endif
+                            </td>
+                            <td>
+                                <div class="action-btns">
+                                    <a href="{{ route('product.edit', $product->id) }}" class="btn-edit" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <form action="{{ route('product.destroy', $product->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus produk ini?');" style="margin: 0;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn-delete" title="Hapus" style="display: inline-flex; justify-content: center; align-items: center; width: 36px; height: 36px; border: none; cursor: pointer; padding: 0;">
+                                        <button type="submit" class="btn-delete" title="Hapus">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </form>
                                 </div>
-                                </td>
-                            </tr>
+                            </td>
+                        </tr>
                         @empty
-                            <tr>
-                                <td colspan="6" style="text-align: center; color: #64748b; padding: 20px;">
-                                    Belum ada data produk untuk kategori ini.
-                                </td>
-                            </tr>
+                        <tr>
+                            <td colspan="6" style="text-align: center; padding: 40px; color: #64748b;">
+                                <i class="fas fa-box-open" style="font-size: 3rem; color: #cbd5e1; margin-bottom: 10px; display: block;"></i>
+                                Belum ada produk di katalog.
+                            </td>
+                        </tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
+
         </div>
+    </main>
 
-    </div>
-
-@endsection
+</body>
+</html>

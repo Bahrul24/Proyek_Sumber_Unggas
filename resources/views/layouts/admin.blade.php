@@ -5,47 +5,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Admin Panel - Sumber Unggas')</title>
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ asset('css/admin-style.css') }}">
-</head>
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Admin Panel - Sumber Unggas')</title>
-    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <link rel="stylesheet" href="{{ asset('css/admin-style.css') }}">
+    
+    @stack('styles')
 </head>
+<body>
 
-<body style="display: flex; flex-direction: column; min-height: 100vh; margin: 0;">
-
-    <header class="admin-header" style="display: flex; justify-content: space-between; align-items: center; padding: 15px 20px;">
-        <h2><i class="fas fa-cogs"></i> Panel Admin</h2>
-        
-        <div style="display: flex; gap: 10px; align-items: center;">
-            <a href="{{ url('/') }}" class="btn-back"><i class="fas fa-external-link-alt"></i> Lihat Website</a>
-            
-            <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
-                @csrf
-                <button type="submit" class="btn-back" style="background-color: #dc2626; color: white; border: none; cursor: pointer; padding: 10px 15px; border-radius: 4px; font-family: inherit; font-size: inherit;">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </button>
-            </form>
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div style="width: 60px; height: 60px; background: white; border-radius: 50%; margin: 0 auto 10px; display:flex; align-items:center; justify-content:center; color:#0f766e; font-size: 24px; font-weight:bold;">
+                <i class="fas fa-rooster"></i>
+            </div>
+            <h3>Panel Admin</h3>
         </div>
-    </header>
+        <ul class="sidebar-menu">
+            <li>
+                <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                    <i class="fas fa-boxes"></i> Kontrol Katalog
+                </a>
+            </li>
+        </ul>
+    </aside>
 
-    <main style="flex: 1;">
-        @yield('content')
+    <main class="main-content">
+        
+        <header class="topbar">
+            <div class="topbar-left">
+                <i class="fas fa-shield-alt"></i> Panel Kendali Pusat
+            </div>
+            <div class="topbar-right">
+                <span style="color: #475569; font-weight: 500;">Halo, {{ Auth::user()->name ?? 'Admin' }}!</span>
+                <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
+                    @csrf
+                    <button type="submit" class="btn-logout">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </form>
+            </div>
+        </header>
+
+        <div class="content-area">
+            @yield('content')
+        </div>
+
     </main>
 
-    <footer style="text-align: center; padding: 20px; color: #6b7280; font-size: 0.875rem; border-top: 1px solid #e5e7eb; background: #fff; margin-top: 20px;">
-        &copy; {{ date('Y') }} Sumber Unggas. All rights reserved.
-    </footer>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @stack('scripts')
 </body>
 </html>

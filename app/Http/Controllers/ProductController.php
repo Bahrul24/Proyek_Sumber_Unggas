@@ -29,6 +29,12 @@ class ProductController extends Controller
         return view('admin.dashboard', compact('products', 'kategori'));
     }
 
+    // [BARU] Menampilkan halaman form tambah produk
+    public function create()
+    {
+        return view('admin.create-product');
+    }
+
     // Memproses form tambah produk
     public function store(Request $request)
     {
@@ -56,8 +62,8 @@ class ProductController extends Controller
             'gambar'      => $gambarPath,
         ]);
 
-        // 4. Kembali ke halaman sebelumnya dengan pesan sukses
-        return back()->with('success', 'Produk berhasil ditambahkan!');
+        // 4. Kembali ke halaman dashboard utama dengan pesan sukses
+        return redirect()->route('admin.dashboard')->with('success', 'Produk berhasil ditambahkan!');
     }
 
     // Menghapus produk dari database dan gambar dari storage
@@ -90,7 +96,7 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
 
-        // 1. Validasi Input (Perhatikan: gambar dibuat 'nullable' karena admin mungkin hanya ingin ganti harga tanpa ganti gambar)
+        // 1. Validasi Input (gambar dibuat 'nullable' karena admin mungkin hanya ingin ganti harga tanpa ganti gambar)
         $request->validate([
             'nama_produk' => 'required',
             'kategori'    => 'required',
